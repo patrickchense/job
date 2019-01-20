@@ -6,22 +6,22 @@ import com.chenzhe.job.entity.JobStatus;
 
 public class QueryJobTask {
 
-    public Long id;
+    private Long id;
 
-    public int type;
+    private int type;
 
-    public JobPriority priority;
+    private JobPriority priority;
 
-    public JobStatus status;
+    private JobStatus status;
 
-    public String name;
+    private String name;
 
-    public long createTimeStart;
+    private long createTimeStart;
 
-    public long createTimeEnd;
+    private long createTimeEnd;
 
-    public int page;
+    private int page;
 
-    public int pageSize;
+    private int pageSize;
 
 }

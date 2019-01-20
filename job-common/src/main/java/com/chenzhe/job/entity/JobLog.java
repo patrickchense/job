@@ -14,10 +14,10 @@ public class JobLog {
 
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
-    public long createTime;
+    private long createTime;
 
     @Column(length = 1000)
-    public String description;
+    private String description;
 }

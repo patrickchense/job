@@ -11,17 +11,17 @@ public class JobTask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    public int type;
+    private int type;
 
-    public JobPriority priority;
+    private JobPriority priority;
 
-    public JobStatus status;
+    private JobStatus status;
 
-    public String name;
+    private String name;
 
-    public long createTime;
+    private long createTime;
 
-    public long updateTime;
+    private long updateTime;
 }
