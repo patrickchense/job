@@ -22,5 +22,7 @@ public class JobScheduler {
 
     private Long nextExecuteTime;
 
+    private Long period;
+
     private long createTime;
 }

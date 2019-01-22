@@ -2,10 +2,14 @@ package com.chenzhe.job.service;
 
 import com.chenzhe.job.context.JobExecuteContext;
 import com.chenzhe.job.context.JobQueueParam;
+import com.chenzhe.job.entity.JobStatus;
+import com.chenzhe.job.entity.SchedulerType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import static com.chenzhe.job.service.JobManager.*;
 
 /*
 runs continuous to find out the next execute job.
@@ -17,6 +21,10 @@ public class JobExecuteThread extends Thread {
 
     @Autowired
     private JobTaskService jobTaskService;
+
+    @Autowired
+    private JobManager jobManager;
+
     /*
     pause time default 1000ms
      */
@@ -26,18 +34,25 @@ public class JobExecuteThread extends Thread {
     @Override
     public void run() {
         while(true) {
-            JobQueueParam param = JobManager.JOB_EXECUTE_QUEUE.peek();
+            JobQueueParam param = JOB_EXECUTE_QUEUE.peek();
             if (param.getNextExecuteTime() <= System.currentTimeMillis()) {
-                JobManager.JOB_EXECUTE_QUEUE.poll();
-                // status change
-                JobExecuteContext context = JobManager.JOBS.get(param.getJobTaskId());
-                try {
-                    context.getJob().execute();
-                    // status change
-                } catch (Exception e) {
-                    //TODO job log
-                    log.error(String.format("[JOB_EXECUTOR] execute job[%d] failed", param.getJobTaskId()), e);
-                    // status change
+                JOB_EXECUTE_QUEUE.poll();
+                JobExecuteContext context = JOBS.get(param.getJobTaskId());
+                if (JobStatus.QUEUED != context.getTask().getStatus()) {
+                    log.warn(String.format("[JOB_EXECUTOR] execute job[%d] status wrong in cache", param.getJobTaskId()));
+                    continue;
+                }
+                boolean result = jobManager.execute(param.getJobTaskId());
+                // handle result
+                // find next run time
+                if (context.getScheduler().getSchedulerType() == SchedulerType.SCHEDULED) {
+                    // create another JobExecuteContext
+                    jobManager.reScheduleJob(param.getJobTaskId());
+                    try {
+                        jobManager.removeJob(param.getJobTaskId());
+                    } catch (Exception e) {
+                        log.error("[JOB_EXECUTOR] remove finished job from cache failed", e);
+                    }
                 }
             } else {
                 try {

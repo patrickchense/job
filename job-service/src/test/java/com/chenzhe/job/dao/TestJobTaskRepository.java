@@ -34,4 +34,22 @@ public class TestJobTaskRepository {
         Assert.assertEquals(jobTask.getPriority(), jobTask1.getPriority());
         Assert.assertEquals(jobTask.getStatus(), jobTask1.getStatus());
     }
+
+
+    @Test
+    public void testUpdateStatus() {
+        JobTask jobTask = new JobTask();
+        jobTask.setName("test1");
+        jobTask.setPriority(JobPriority.MID);
+        jobTask.setStatus(JobStatus.NEW);
+        jobTask.setCreateTime(System.currentTimeMillis());
+        jobTask = jobTaskRepository.save(jobTask);
+        Assert.assertNotNull(jobTask.getId());
+        JobTask jobTask1 = jobTaskRepository.findById(jobTask.getId()).get();
+        Assert.assertEquals(jobTask.getPriority(), jobTask1.getPriority());
+        Assert.assertEquals(jobTask.getStatus(), jobTask1.getStatus());
+        jobTaskRepository.updateStatus(jobTask1.getId(), jobTask1.getStatus(), JobStatus.QUEUED);
+        JobTask jobTask2 = jobTaskRepository.findById(jobTask.getId()).get();
+        Assert.assertEquals(JobStatus.QUEUED, jobTask2.getStatus());
+    }
 }
