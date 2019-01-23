@@ -3,6 +3,7 @@ package com.chenzhe.job.service;
 import com.chenzhe.job.context.JobExecuteContext;
 import com.chenzhe.job.context.JobQueueParam;
 import com.chenzhe.job.entity.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Getter
 public class JobManager {
 
     @Autowired
@@ -113,5 +115,12 @@ public class JobManager {
                 throw new Exception("only support scheduled type job task to reschedule");
             }
         }
+    }
+
+    /*
+        reload unfinished job tasks from the database
+     */
+    public void reloadJobTasks() {
+
     }
 }

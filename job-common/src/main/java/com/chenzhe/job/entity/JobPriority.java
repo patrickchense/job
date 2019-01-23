@@ -13,6 +13,6 @@ public enum JobPriority {
     }
 
     public static int compare(JobPriority priority1, JobPriority priority2) {
-        return priority1.level - priority2.level;
+        return priority1.level < priority2.level ? 1 : (priority1.level == priority2.level ? 0 : -1);
     }
 }

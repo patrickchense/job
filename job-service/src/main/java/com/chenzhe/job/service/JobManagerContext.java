@@ -18,7 +18,7 @@ public class JobManagerContext {
     @Value("${job.manager.queue.size}")
     private Integer QUEUE_SIZE = 20;
 
-    private PriorityBlockingQueue<JobQueueParam> JOB_EXECUTE_QUEUE = new PriorityBlockingQueue<>(QUEUE_SIZE, (param1, param2) -> (int) (param1.getNextExecuteTime().equals(param2.getNextExecuteTime()) ? JobPriority.compare(param1.getPriority(), param2.getPriority()) :param1.getNextExecuteTime() - param2.getNextExecuteTime()));
+    private PriorityBlockingQueue<JobQueueParam> JOB_EXECUTE_QUEUE = new PriorityBlockingQueue<>(QUEUE_SIZE, (param1, param2) -> (int) (param1.getNextExecuteTime().equals(param2.getNextExecuteTime()) ? JobPriority.compare(param1.getPriority(), param2.getPriority()) : param1.getNextExecuteTime() - param2.getNextExecuteTime()));
 
     private ConcurrentHashMap<Long, JobExecuteContext> JOBS = new ConcurrentHashMap<>();
 
@@ -62,6 +62,10 @@ public class JobManagerContext {
 
     JobQueueParam peekJobParam() {
         return JOB_EXECUTE_QUEUE.peek();
+    }
+
+    boolean queueEmpty() {
+        return JOB_EXECUTE_QUEUE.isEmpty();
     }
 
     JobQueueParam pollJobParam() {

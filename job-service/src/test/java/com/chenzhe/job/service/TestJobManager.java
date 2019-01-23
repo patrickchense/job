@@ -29,11 +29,15 @@ public class TestJobManager {
     @Autowired
     private JobTaskService jobTaskService;
 
+    @Autowired
+    private JobExecuteThread jobExecuteThread;
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void init() {
+        jobExecuteThread.turnOffAuto();
         jobManagerContext.clear();
     }
 

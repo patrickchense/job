@@ -33,10 +33,25 @@ public class JobExecuteThread extends Thread {
     @Value("${job.execute.pause:10000}")
     private Long pauseTime;
 
+    @Value("${job.execute.switch:true}")
+    private Boolean trigger;
+
     @Override
     public void run() {
-        while(true) {
+        if (log.isInfoEnabled()) {
+            log.info("[JOB_EXECUTOR] thread starts watching");
+        }
+        while(trigger) {
+            while (jobManagerContext.queueEmpty()) {
+                try {
+                    Thread.sleep(pauseTime);
+                } catch (InterruptedException e) {
+                    log.error("[JOB_EXECUTOR] timer failed", e);
+                    break;
+                }
+            }
             JobQueueParam param = jobManagerContext.peekJobParam();
+            log.info("[JOB_EXECUTOR] param:" + param);
             if (param.getNextExecuteTime() <= System.currentTimeMillis()) {
                 jobManagerContext.pollJobParam();
                 JobExecuteContext context = jobManagerContext.getJobExecuteContext(param.getJobTaskId());
@@ -58,11 +73,19 @@ public class JobExecuteThread extends Thread {
                 }
             } else {
                 try {
-                    Thread.sleep(pauseTime);
+                    Thread.sleep(param.getNextExecuteTime() - System.currentTimeMillis());
                 } catch (InterruptedException e) {
                     log.error("[JOB_EXECUTOR] timer failed", e);
+                    break;
                 }
             }
         }
+        if (log.isInfoEnabled()) {
+            log.info("[JOB_EXECUTOR] thread stoped");
+        }
+    }
+
+    public void turnOffAuto() {
+        this.trigger = false;
     }
 }
