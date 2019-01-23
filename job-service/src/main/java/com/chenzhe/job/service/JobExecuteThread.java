@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.chenzhe.job.service.JobManager.*;
 
 /*
 runs continuous to find out the next execute job.
@@ -25,19 +24,22 @@ public class JobExecuteThread extends Thread {
     @Autowired
     private JobManager jobManager;
 
+    @Autowired
+    private JobManagerContext jobManagerContext;
+
     /*
     pause time default 1000ms
      */
-    @Value("${job.execute.pause:5000")
-    private long pauseTime;
+    @Value("${job.execute.pause:10000}")
+    private Long pauseTime;
 
     @Override
     public void run() {
         while(true) {
-            JobQueueParam param = JOB_EXECUTE_QUEUE.peek();
+            JobQueueParam param = jobManagerContext.peekJobParam();
             if (param.getNextExecuteTime() <= System.currentTimeMillis()) {
-                JOB_EXECUTE_QUEUE.poll();
-                JobExecuteContext context = JOBS.get(param.getJobTaskId());
+                jobManagerContext.pollJobParam();
+                JobExecuteContext context = jobManagerContext.getJobExecuteContext(param.getJobTaskId());
                 if (JobStatus.QUEUED != context.getTask().getStatus()) {
                     log.warn(String.format("[JOB_EXECUTOR] execute job[%d] status wrong in cache", param.getJobTaskId()));
                     continue;
@@ -47,11 +49,11 @@ public class JobExecuteThread extends Thread {
                 // find next run time
                 if (context.getScheduler().getSchedulerType() == SchedulerType.SCHEDULED) {
                     // create another JobExecuteContext
-                    jobManager.reScheduleJob(param.getJobTaskId());
                     try {
-                        jobManager.removeJob(param.getJobTaskId());
+                        jobManager.reScheduleJob(param.getJobTaskId());
+                        jobManagerContext.removeJob(param.getJobTaskId());
                     } catch (Exception e) {
-                        log.error("[JOB_EXECUTOR] remove finished job from cache failed", e);
+                        log.error("[JOB_EXECUTOR] reschedule | remove finished job from cache failed", e);
                     }
                 }
             } else {

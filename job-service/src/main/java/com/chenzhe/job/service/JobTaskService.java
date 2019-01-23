@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface JobTaskService {
 
-    List<JobTask>  findJobTasks(QueryJobTask queryJobTask);
+    List<JobTask> findJobTasks(QueryJobTask queryJobTask);
+
+    List<JobTask> findJobTasksByPage(final QueryJobTask queryJobTask);
 
     JobTask save(JobTask task);
 

@@ -3,12 +3,14 @@ package com.chenzhe.job.query;
 
 import com.chenzhe.job.entity.JobPriority;
 import com.chenzhe.job.entity.JobStatus;
+import lombok.Data;
 
+@Data
 public class QueryJobTask {
 
     private Long id;
 
-    private int type;
+    private String type;
 
     private JobPriority priority;
 

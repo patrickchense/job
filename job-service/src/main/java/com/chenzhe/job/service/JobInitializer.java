@@ -9,6 +9,7 @@ public class JobInitializer implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        // TODO reload unfinished JOB TASK from db
+        // TODO start thread to watch queue
     }
 }
