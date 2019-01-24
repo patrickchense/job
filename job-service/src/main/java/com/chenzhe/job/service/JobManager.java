@@ -40,6 +40,15 @@ public class JobManager {
     }
 
     /*
+    TODO
+        could do register and start in one function
+        based on different type of ScheduleTypes.
+     */
+    public JobExecuteContext registerAndStart(String name, String type, JobPriority jobPriority, Job job, SchedulerType scheduleType ) throws Exception {
+        return null;
+    }
+
+    /*
     check schedule type
     put job into queue
      */

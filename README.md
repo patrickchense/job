@@ -39,3 +39,9 @@ provide three types of scheduling.
  * running immediately
  * running once at a specific time.
  * running based on a scheduled period. 
+ 
+ ##Improvement
+ 1. more apis in the jobManager
+ 2. more apis in web
+ 3. support annotation registration job tasks and schedule
+ 4. ...
