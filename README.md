@@ -1,6 +1,6 @@
 ## Job Management
 ## Module Design
-![design thinkings](docs/desgin.jpeg)
+![design thinkings](https://github.com/patrickzhe/job/blob/master/docs/design.jpeg)
 
 
 ## job-common
