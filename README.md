@@ -44,4 +44,5 @@ provide three types of scheduling.
  1. more apis in the jobManager
  2. more apis in web
  3. support annotation registration job tasks and schedule
- 4. ...
+ 4. change inner db(H2) to Mysql or Postgres.
+ 5. ...
