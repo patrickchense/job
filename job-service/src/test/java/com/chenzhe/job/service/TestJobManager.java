@@ -67,7 +67,7 @@ public class TestJobManager {
 
     @Test
     public void testStartJob() throws Exception {
-        JobExecuteContext context = jobManager.registerJob("testJobManager1", "type1", JobPriority.LOW, new Job() {
+        JobExecuteContext context = jobManager.registerJob("testJobManager2", "type1", JobPriority.LOW, new Job() {
             @Override
             public void execute() throws Exception {
                 System.out.println("test register job");
@@ -87,7 +87,7 @@ public class TestJobManager {
 
     @Test
     public void testExecute() throws Exception {
-        JobExecuteContext context = jobManager.registerJob("testJobManager1", "type1", JobPriority.LOW, new Job() {
+        JobExecuteContext context = jobManager.registerJob("testJobManager3", "type1", JobPriority.LOW, new Job() {
             @Override
             public void execute() throws Exception {
                 System.out.println("test register job");
@@ -109,7 +109,7 @@ public class TestJobManager {
 
     @Test
     public void testExecuteFailed() throws Exception {
-        JobExecuteContext context = jobManager.registerJob("testJobManager1", "type1", JobPriority.LOW, new Job() {
+        JobExecuteContext context = jobManager.registerJob("testJobManager4", "type1", JobPriority.LOW, new Job() {
             @Override
             public void execute() throws Exception {
                 throw new RuntimeException("test failed");
@@ -126,7 +126,7 @@ public class TestJobManager {
 
     @Test
     public void testReScheduleJob() throws Exception {
-        JobExecuteContext context = jobManager.registerJob("testJobManager1", "type1", JobPriority.LOW, new Job() {
+        JobExecuteContext context = jobManager.registerJob("testJobManager5", "type1", JobPriority.LOW, new Job() {
             @Override
             public void execute() throws Exception {
                 System.out.println("test register job");
@@ -141,7 +141,7 @@ public class TestJobManager {
         Assert.assertEquals(JobStatus.SUCCESS, jobTask.getStatus());
         jobManager.reScheduleJob(context.getTask().getId());
         QueryJobTask queryJobTask = new QueryJobTask();
-        queryJobTask.setName("testJobManager1");
+        queryJobTask.setName("testJobManager5");
         List<JobTask> tasks = jobTaskService.findJobTasks(queryJobTask);
         Assert.assertEquals(2, tasks.size());
         tasks.sort((a, b) -> a.getCreateTime() < b.getCreateTime() ? 1 : 0);
