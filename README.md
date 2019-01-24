@@ -1,12 +1,12 @@
-##Job Management
-##Module Design
+## Job Management
+## Module Design
 ![design thinkings](docs/desgin.jpeg)
 
 
-##job-common
+## job-common
 all the basic entities and query beans
 
-##job-service
+## job-service
 most important module
 1. all the daos
 2. all the services
@@ -14,18 +14,18 @@ most important module
 4. JobExecuteThread, watchs the job task queue and run the job in time.
 
 
-##job-web
+## job-web
 provide all kinds of apis
 1. query job tasks
 2. query logs
 
 
-##demo
+## demo
 show how to use job management system in the third party projects
 
 
 
-##Meet Requirements
+## Meet Requirements
 1. Flexibility
 supports all the kinds of jobs running as long as though impl the Job interface.
 2. Reliability
@@ -40,7 +40,7 @@ provide three types of scheduling.
  * running once at a specific time.
  * running based on a scheduled period. 
  
- ##Improvement
+ ## Improvement
  1. more apis in the jobManager
  2. more apis in web
  3. support annotation registration job tasks and schedule
